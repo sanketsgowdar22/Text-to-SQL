@@ -19,7 +19,7 @@ settings = get_settings()
 # ── Engine Configuration ─────────────────────────────────────────────────────
 
 # SQLite-specific: enable WAL mode and foreign keys
-_engine_kwargs: dict = {
+_engine_kwargs: dict[str, object] = {
     "echo": settings.debug,
     "pool_pre_ping": True,
 }

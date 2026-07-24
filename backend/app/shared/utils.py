@@ -6,12 +6,12 @@ Provides helpers used across multiple features.
 
 import logging
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 
 def utc_now() -> datetime:
     """Return the current UTC datetime (timezone-aware)."""
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 def setup_logging(log_level: str = "INFO") -> None:
