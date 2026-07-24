@@ -6,8 +6,7 @@ and application instances used across all test modules.
 """
 
 import asyncio
-from collections.abc import AsyncGenerator
-from typing import Generator
+from collections.abc import AsyncGenerator, Generator
 
 import pytest
 import pytest_asyncio
@@ -17,8 +16,8 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 from app.core.database import Base, get_db_session
 from app.main import create_app
 
-
 # ── Event Loop ───────────────────────────────────────────────────────────────
+
 
 @pytest.fixture(scope="session")
 def event_loop() -> Generator[asyncio.AbstractEventLoop, None, None]:

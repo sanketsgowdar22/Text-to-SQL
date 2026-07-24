@@ -1,0 +1,109 @@
+# =============================================================================
+# ADIP — CI/CD Pipeline
+# =============================================================================
+# Triggers on push/PR to development and main branches.
+# Runs: Lint → Type Check → Test → Build Verification
+# =============================================================================
+
+name: CI Pipeline
+
+on:
+  push:
+    branches: [development, main]
+  pull_request:
+    branches: [development, main]
+
+jobs:
+  # ── Lint ──────────────────────────────────────────────────────────────────
+  lint:
+    name: Lint (Ruff)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Ruff
+        run: pip install ruff>=0.5.0
+
+      - name: Run Ruff Linter
+        run: ruff check app/ tests/
+
+      - name: Run Ruff Formatter Check
+        run: ruff format --check app/ tests/
+
+  # ── Type Check ───────────────────────────────────────────────────────────
+  type-check:
+    name: Type Check (MyPy)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+
+      - name: Run MyPy
+        run: mypy app/ tests/ --ignore-missing-imports
+
+  # ── Test ─────────────────────────────────────────────────────────────────
+  test:
+    name: Test (pytest)
+    runs-on: ubuntu-latest
+    needs: [lint]
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+
+      - name: Run Tests with Coverage
+        run: |
+          python -m pytest -v --tb=short --cov=app --cov-report=xml --cov-report=term-missing
+
+      - name: Upload Coverage Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: backend/coverage.xml
+
+  # ── Build Verification ──────────────────────────────────────────────────
+  build:
+    name: Build Verification
+    runs-on: ubuntu-latest
+    needs: [test]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify Dockerfile syntax
+        run: docker build -f docker/Dockerfile.backend --target dependencies .
