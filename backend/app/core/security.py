@@ -8,7 +8,8 @@ Note: Full authentication flow is implemented in Phase 2 (Auth feature).
 This module provides the low-level cryptographic primitives.
 """
 
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
+from typing import Any
 
 from jose import JWTError, jwt
 from passlib.context import CryptContext
@@ -35,7 +36,7 @@ def hash_password(password: str) -> str:
     Returns:
         The bcrypt hash of the password.
     """
-    return pwd_context.hash(password)
+    return str(pwd_context.hash(password))
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -49,7 +50,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     Returns:
         True if the password matches, False otherwise.
     """
-    return pwd_context.verify(plain_password, hashed_password)
+    return bool(pwd_context.verify(plain_password, hashed_password))
 
 
 # ── JWT Token Management ────────────────────────────────────────────────────
@@ -57,7 +58,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 def create_access_token(
     subject: str,
-    extra_claims: dict | None = None,
+    extra_claims: dict[str, Any] | None = None,
     expires_delta: timedelta | None = None,
 ) -> str:
     """
@@ -74,7 +75,7 @@ def create_access_token(
     if expires_delta is None:
         expires_delta = timedelta(minutes=settings.access_token_expire_minutes)
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     claims = {
         "sub": str(subject),
         "iat": now,
@@ -84,7 +85,7 @@ def create_access_token(
     if extra_claims:
         claims.update(extra_claims)
 
-    return jwt.encode(claims, settings.secret_key, algorithm=settings.algorithm)
+    return str(jwt.encode(claims, settings.secret_key, algorithm=settings.algorithm))
 
 
 def create_refresh_token(
@@ -104,7 +105,7 @@ def create_refresh_token(
     if expires_delta is None:
         expires_delta = timedelta(days=settings.refresh_token_expire_days)
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     claims = {
         "sub": str(subject),
         "iat": now,
@@ -112,10 +113,10 @@ def create_refresh_token(
         "type": "refresh",
     }
 
-    return jwt.encode(claims, settings.secret_key, algorithm=settings.algorithm)
+    return str(jwt.encode(claims, settings.secret_key, algorithm=settings.algorithm))
 
 
-def decode_token(token: str) -> dict:
+def decode_token(token: str) -> dict[str, Any]:
     """
     Decode and validate a JWT token.
 

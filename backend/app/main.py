@@ -6,9 +6,9 @@ exception handlers, routers, and lifecycle events.
 """
 
 import logging
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
-from datetime import datetime, timezone
-from typing import AsyncGenerator
+from datetime import UTC, datetime
 
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
@@ -105,7 +105,7 @@ def _register_routers(app: FastAPI) -> None:
     # Example (Phase 2):
     # from app.features.auth.router import router as auth_router
     # app.include_router(auth_router, prefix=f"{API_V1_PREFIX}/auth", tags=["Authentication"])
-    pass  # noqa: PIE790
+    pass
 
 
 def _register_health_endpoints(app: FastAPI) -> None:
@@ -130,9 +130,11 @@ def _register_health_endpoints(app: FastAPI) -> None:
             status="healthy",
             version=settings.app_version,
             environment=settings.app_env,
-            timestamp=datetime.now(timezone.utc),
+            timestamp=datetime.now(UTC),
         )
-        response = SuccessResponse(data=health, message="Service is healthy")
+        response: SuccessResponse[HealthResponse] = SuccessResponse(
+            data=health, message="Service is healthy"
+        )
         return JSONResponse(
             status_code=200,
             content=response.model_dump(mode="json"),

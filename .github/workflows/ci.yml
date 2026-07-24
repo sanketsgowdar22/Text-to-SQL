@@ -61,7 +61,7 @@ jobs:
           pip install -r requirements-dev.txt
 
       - name: Run MyPy
-        run: mypy app/ --ignore-missing-imports
+        run: mypy app/ tests/ --ignore-missing-imports
 
   # ── Test ─────────────────────────────────────────────────────────────────
   test:

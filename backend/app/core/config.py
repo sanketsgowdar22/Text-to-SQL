@@ -35,14 +35,14 @@ class Settings(BaseSettings):
     debug: bool = True
 
     # ── Server ───────────────────────────────────────────────────────────────
-    host: str = "0.0.0.0"
+    host: str = "0.0.0.0"  # noqa: S104
     port: int = 8000
 
     # ── Database ─────────────────────────────────────────────────────────────
     database_url: str = "sqlite+aiosqlite:///./adip.db"
 
     # ── Security ─────────────────────────────────────────────────────────────
-    secret_key: str = "CHANGE-THIS-TO-A-RANDOM-SECRET-KEY-IN-PRODUCTION"
+    secret_key: str = "CHANGE-THIS-TO-A-RANDOM-SECRET-KEY-IN-PRODUCTION"  # noqa: S105
     access_token_expire_minutes: int = 30
     refresh_token_expire_days: int = 7
     algorithm: str = "HS256"
@@ -99,7 +99,7 @@ class Settings(BaseSettings):
                 return [origin.strip() for origin in v.split(",") if origin.strip()]
         if isinstance(v, list):
             return [str(origin) for origin in v]
-        return v  # type: ignore[return-value]
+        return v  # type: ignore[no-any-return]
 
 
 @lru_cache(maxsize=1)

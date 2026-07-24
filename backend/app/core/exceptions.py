@@ -2,7 +2,7 @@
 Custom exception classes and FastAPI exception handlers.
 
 Provides a consistent error response format across the entire API.
-All custom exceptions inherit from ADIPBaseException to ensure
+All custom exceptions inherit from ADIPBaseError to ensure
 uniform error handling and response structure.
 """
 
@@ -12,11 +12,10 @@ from fastapi import FastAPI, Request, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
-
 # ── Base Exception ───────────────────────────────────────────────────────────
 
 
-class ADIPBaseException(Exception):
+class ADIPBaseError(Exception):
     """
     Base exception for all ADIP application errors.
 
@@ -39,7 +38,7 @@ class ADIPBaseException(Exception):
 # ── Specific Exceptions ─────────────────────────────────────────────────────
 
 
-class NotFoundException(ADIPBaseException):
+class NotFoundError(ADIPBaseError):
     """Raised when a requested resource is not found."""
 
     def __init__(self, resource: str = "Resource", resource_id: Any = None) -> None:
@@ -53,7 +52,7 @@ class NotFoundException(ADIPBaseException):
         )
 
 
-class ConflictException(ADIPBaseException):
+class ConflictError(ADIPBaseError):
     """Raised when a resource already exists or conflicts with current state."""
 
     def __init__(self, message: str = "Resource already exists") -> None:
@@ -63,7 +62,7 @@ class ConflictException(ADIPBaseException):
         )
 
 
-class UnauthorizedException(ADIPBaseException):
+class UnauthorizedError(ADIPBaseError):
     """Raised when authentication fails or is missing."""
 
     def __init__(self, message: str = "Authentication required") -> None:
@@ -73,7 +72,7 @@ class UnauthorizedException(ADIPBaseException):
         )
 
 
-class ForbiddenException(ADIPBaseException):
+class ForbiddenError(ADIPBaseError):
     """Raised when the user lacks permission to access a resource."""
 
     def __init__(self, message: str = "Insufficient permissions") -> None:
@@ -83,7 +82,7 @@ class ForbiddenException(ADIPBaseException):
         )
 
 
-class BadRequestException(ADIPBaseException):
+class BadRequestError(ADIPBaseError):
     """Raised when the request is malformed or contains invalid data."""
 
     def __init__(self, message: str = "Bad request", detail: Any = None) -> None:
@@ -94,7 +93,7 @@ class BadRequestException(ADIPBaseException):
         )
 
 
-class DatabaseConnectionException(ADIPBaseException):
+class DatabaseConnectionError(ADIPBaseError):
     """Raised when a database connection attempt fails."""
 
     def __init__(self, message: str = "Database connection failed", detail: Any = None) -> None:
@@ -105,7 +104,7 @@ class DatabaseConnectionException(ADIPBaseException):
         )
 
 
-class QueryExecutionException(ADIPBaseException):
+class QueryExecutionError(ADIPBaseError):
     """Raised when a SQL query execution fails."""
 
     def __init__(self, message: str = "Query execution failed", detail: Any = None) -> None:
@@ -116,7 +115,7 @@ class QueryExecutionException(ADIPBaseException):
         )
 
 
-class LLMProviderException(ADIPBaseException):
+class LLMProviderError(ADIPBaseError):
     """Raised when an LLM provider request fails."""
 
     def __init__(self, message: str = "LLM provider error", detail: Any = None) -> None:
@@ -127,7 +126,7 @@ class LLMProviderException(ADIPBaseException):
         )
 
 
-class RateLimitException(ADIPBaseException):
+class RateLimitError(ADIPBaseError):
     """Raised when a rate limit is exceeded."""
 
     def __init__(self, message: str = "Rate limit exceeded") -> None:
@@ -170,10 +169,10 @@ def register_exception_handlers(app: FastAPI) -> None:
     returns a consistent JSON structure.
     """
 
-    @app.exception_handler(ADIPBaseException)
+    @app.exception_handler(ADIPBaseError)
     async def adip_exception_handler(
-        request: Request,  # noqa: ARG001
-        exc: ADIPBaseException,
+        request: Request,
+        exc: ADIPBaseError,
     ) -> JSONResponse:
         """Handle all ADIP custom exceptions."""
         return _build_error_response(
@@ -185,18 +184,20 @@ def register_exception_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(RequestValidationError)
     async def validation_exception_handler(
-        request: Request,  # noqa: ARG001
+        request: Request,
         exc: RequestValidationError,
     ) -> JSONResponse:
         """Handle Pydantic validation errors with a consistent format."""
         errors = []
         for error in exc.errors():
             field = " -> ".join(str(loc) for loc in error["loc"]) if error["loc"] else "unknown"
-            errors.append({
-                "field": field,
-                "message": error["msg"],
-                "type": error["type"],
-            })
+            errors.append(
+                {
+                    "field": field,
+                    "message": error["msg"],
+                    "type": error["type"],
+                }
+            )
         return _build_error_response(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             message="Validation error",
@@ -206,8 +207,8 @@ def register_exception_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(Exception)
     async def unhandled_exception_handler(
-        request: Request,  # noqa: ARG001
-        exc: Exception,  # noqa: ARG001
+        request: Request,
+        exc: Exception,
     ) -> JSONResponse:
         """Handle any unhandled exceptions to prevent stack trace leaks."""
         return _build_error_response(
