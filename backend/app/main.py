@@ -102,10 +102,14 @@ def _register_routers(app: FastAPI) -> None:
     - etc.
     """
     # Feature routers will be registered here as phases are implemented.
-    # Example (Phase 2):
-    # from app.features.auth.router import router as auth_router
-    # app.include_router(auth_router, prefix=f"{API_V1_PREFIX}/auth", tags=["Authentication"])
-    pass
+    # Phase 2: Auth router
+    from app.features.auth.router import router as auth_router
+
+    app.include_router(
+        auth_router,
+        prefix=f"{API_V1_PREFIX}/auth",
+        tags=["Authentication"],
+    )
 
 
 def _register_health_endpoints(app: FastAPI) -> None:

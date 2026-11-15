@@ -10,11 +10,11 @@ Individual phase specification documents for the ADIP development lifecycle.
 |-------|----------|--------|
 | Phase 00 | [Engineering Foundation](PHASE_00_ENGINEERING_FOUNDATION.md) | ✅ Complete |
 | Phase 01 | [Project Foundation](PHASE_01_PROJECT_FOUNDATION.md) | ✅ Complete |
-| Phase 02 | [Authentication & User Management](PHASE_02_AUTHENTICATION.md) | 🎯 In Progress |
+| Phase 02 | [Authentication & User Management](PHASE_02_AUTHENTICATION.md) | ✅ Complete |
 | Phase 03 | [Database Connection Management](PHASE_03_DATABASE_CONNECTIONS.md) | ⬜ Planned |
 | Phase 04 | [Schema Ingestion & Introspection](PHASE_04_SCHEMA_INGESTION.md) | ⬜ Planned |
 | Phase 05 | [Embeddings & Vector Indexing](PHASE_05_EMBEDDINGS.md) | ⬜ Planned |
-| Phase 06 | [Gemini LLM Text-to-SQL](PHASE_06_TEXT_TO_SQL.md) | ⬜ Planned |
+| Phase 06 | [NVIDIA NIM LLM Text-to-SQL](PHASE_06_TEXT_TO_SQL.md) | ⬜ Planned |
 | Phase 07 | [SQL Safety & Guardrails](PHASE_07_GUARDRAILS.md) | ⬜ Planned |
 | Phase 08 | [Frontend & Production Deployment](PHASE_08_FRONTEND_DEPLOYMENT.md) | ⬜ Planned |
 
