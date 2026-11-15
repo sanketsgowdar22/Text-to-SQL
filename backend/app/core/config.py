@@ -53,9 +53,10 @@ class Settings(BaseSettings):
         "http://127.0.0.1:3000",
     ]
 
-    # ── Gemini API (Phase 7+) ────────────────────────────────────────────────
-    gemini_api_key: str | None = None
-    gemini_model: str = "gemini-1.5-flash"
+    # ── NVIDIA NIM API (Phase 6+) ────────────────────────────────────────────
+    nvidia_api_key: str | None = None
+    nvidia_base_url: str = "https://integrate.api.nvidia.com/v1"
+    nvidia_model: str = "z-ai/glm-5.3-flash"
 
     # ── Embedding Model (Phase 5+) ──────────────────────────────────────────
     embedding_model: str = "all-MiniLM-L6-v2"

@@ -1,6 +1,6 @@
 # AI Data Intelligence Platform (ADIP) — Text-to-SQL
 
-Enterprise AI Data Intelligence Platform powered by FastAPI, Google Gemini LLM, Sentence-Transformers, FAISS, and SQLAlchemy.
+Enterprise AI Data Intelligence Platform powered by FastAPI, NVIDIA NIM LLM, Sentence-Transformers, FAISS, and SQLAlchemy.
 
 [![CI Pipeline](https://github.com/your-org/Text-to-SQL/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/Text-to-SQL/actions)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
@@ -34,7 +34,7 @@ Enterprise AI Data Intelligence Platform powered by FastAPI, Google Gemini LLM, 
 | :--- | :--- | :--- |
 | Phase 00 | [Engineering Foundation](docs/05_Phases/PHASE_00_ENGINEERING_FOUNDATION.md) | ✅ Complete |
 | Phase 01 | [Project Foundation](docs/05_Phases/PHASE_01_PROJECT_FOUNDATION.md) | ✅ Complete |
-| Phase 02 | [Authentication](docs/05_Phases/PHASE_02_AUTHENTICATION.md) | 🎯 In Progress |
+| Phase 02 | [Authentication](docs/05_Phases/PHASE_02_AUTHENTICATION.md) | ✅ Complete |
 | Phase 03 | [Database Connections](docs/05_Phases/PHASE_03_DATABASE_CONNECTIONS.md) | ⬜ Planned |
 | Phase 04 | [Schema Ingestion](docs/05_Phases/PHASE_04_SCHEMA_INGESTION.md) | ⬜ Planned |
 | Phase 05 | [Embeddings & RAG](docs/05_Phases/PHASE_05_EMBEDDINGS.md) | ⬜ Planned |
@@ -144,7 +144,7 @@ See [Task Implementation Guide](docs/03_Engineering/TASK_IMPLEMENTATION_GUIDE.md
 | **ORM** | SQLAlchemy 2.0 (Async), Alembic |
 | **Validation** | Pydantic v2, Pydantic-Settings |
 | **Security** | python-jose (JWT), Passlib (bcrypt) |
-| **LLM** | Google Gemini API |
+| **LLM** | NVIDIA NIM API (z-ai/glm-5-3-flash) |
 | **Embeddings** | Sentence-Transformers, FAISS |
 | **Testing** | pytest, pytest-asyncio, HTTPX |
 | **Linting** | Ruff, MyPy (strict) |
