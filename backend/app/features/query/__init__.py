@@ -1,5 +1,5 @@
 """
-Gemini LLM Text-to-SQL Engine feature package.
+NVIDIA NIM LLM Text-to-SQL Engine feature package.
 
 Phase 6: Text-to-SQL Generation
 Provides prompt engineering, LLM integration,

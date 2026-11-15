@@ -18,7 +18,7 @@ The AI service layer houses the machine learning components of the ADIP platform
 | Vector Store | Phase 05 | FAISS index management and persistence |
 | Semantic Retriever | Phase 05 | Top-K schema element retrieval |
 | Prompt Engine | Phase 06 | LLM prompt construction pipeline |
-| Gemini Client | Phase 06 | Google Gemini API integration |
+| NVIDIA NIM Client | Phase 06 | NVIDIA NIM API integration (z-ai/glm-5.3-flash) |
 | SQL Parser | Phase 06 | LLM response → clean SQL extraction |
 
 ---
@@ -29,7 +29,7 @@ The AI service layer houses the machine learning components of the ADIP platform
 |-----------|-----------|
 | Embeddings | Sentence-Transformers (`all-MiniLM-L6-v2`) |
 | Vector Store | FAISS |
-| LLM Provider | Google Gemini API (`gemini-1.5-flash`) |
+| LLM Provider | NVIDIA NIM API (`z-ai/glm-5.3-flash`) |
 
 > **Note**: AI components are currently implemented as feature modules within `backend/app/features/`. This top-level directory will house standalone AI service code if the architecture evolves to a microservices model.
 
